@@ -1,0 +1,8 @@
+# IDEA stuff
+.idea/
+.vs/
+.vscode/
+
+# .net stuff
+*/[Bb]in/
+*/[Oo]bj/
