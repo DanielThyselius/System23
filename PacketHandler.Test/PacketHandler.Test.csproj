@@ -24,4 +24,10 @@
       <ProjectReference Include="..\PacketHandler.Lib\PacketHandler.Lib.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="testData.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

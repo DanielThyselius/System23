@@ -3,7 +3,7 @@ using PacketHandler.Lib;
 
 namespace PacketHandler.Test;
 
-public class CylinderTests
+public class CylinderTests : IClassFixture<PacketFixture>
 {
     private readonly PacketFixture _fixture;
 
@@ -25,8 +25,7 @@ public class CylinderTests
     }
 
     [Theory]
-    [InlineData(1, 5, 15.707963267948966192313216916398)]
-    [InlineData(2, 7, 87.964594300514210676954014731826)]
+    [MemberData(nameof(TestData.CylinderVolumeTestData), MemberType = typeof(TestData))]
     public void CalculatesVolumeCorrectly(float radius, float length, float expected)
     {
         // Arrange
@@ -42,11 +41,9 @@ public class CylinderTests
     }
 
 
-    // Omkrets x längd x vikt.
-    // Minsta vikt vid beräkning är 2 kg.
     [Theory]
     [ClassData(typeof(CylinderTestData))]
-    public void CanCalculatePrice(float radius, float length, float expected)
+    public void CanCalculatePrice(float radius, float length, int weight, float expected)
     {
         // Arrange
         var sut = _fixture.NormalCylinder;
@@ -60,6 +57,14 @@ public class CylinderTests
         // Assert
         Assert.Equal(expected, actual);
     }
+
+    // This test is stupid, but it's just to show that you can use MemberData
+    [Theory]
+    [MemberData(nameof(TestData.FromCsv), MemberType = typeof(TestData))]
+    public void TestDataWorks(int a, int b)
+    {
+        Assert.Equal(a*2, b);
+    }
 }
 
 public class CylinderTestData : IEnumerable<object[]>
@@ -68,8 +73,8 @@ public class CylinderTestData : IEnumerable<object[]>
     {
         var list = new List<object[]>()
         {
-            new object[] { 1, 1, 1 },
-            new object[] { 2, 2, 2 },
+            new object[] { 1, 1, 1, 1 },
+            new object[] { 2, 2, 2, 2 },
         };
         return list.GetEnumerator();
         

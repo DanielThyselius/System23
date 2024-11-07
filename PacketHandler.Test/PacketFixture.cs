@@ -2,7 +2,7 @@
 
 namespace PacketHandler.Test;
 
-public class PacketFixture : IClassFixture<Cylinder>
+public class PacketFixture 
 {
     public Cylinder NormalCylinder { get; }
 
