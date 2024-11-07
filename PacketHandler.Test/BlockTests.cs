@@ -47,20 +47,27 @@ public class BlockTests
         // Assert
         Assert.ThrowsAny<ArgumentOutOfRangeException>(() => sut.GetVolume());
     }
-    // Kortaste sidan (cm) x längsta sidan (cm) x vikt (kg) + 10000 = pris i öre. 
-    // 
-    // plus detta:
-    //
-    // Om längsta sidan < 30 cm och upp till 2 kg, 29 kr,
-    // och 2-9 kg, 49 kr,
-    // och 10-20 kg, 79 kr
+    
+    // Om längsta sidan <= 30 cm gäller detta:
+    // 0-2 kg, 29 kr,
+    // 3-9 kg, 49 kr,
+    // 10-20 kg, 79 kr
+    //    
+    // Annas gäller:
+    // Kortaste sidan (cm) x längsta sidan (cm) x vikt (kg) + 10000 = pris i öre.
 
-    // TODO: verify price logic above
+
     [Theory]
-    [InlineData(10, 10, 10, 1, 130)]
-    [InlineData(40, 10, 10, 1, 153)]
-    [InlineData(40, 10, 10, 10, 219 )]
-    public void CalculatesCorrectPrice(int length, int width, int height, int weight, int expected)
+    [InlineData(30, 30, 30, 0, 29)]
+    [InlineData(30, 30, 30, 1, 29)]
+    [InlineData(1, 1, 1, 1, 29)]
+    [InlineData(0, 0, 0, 1, 29)]
+    [InlineData(30, 30, 30, 2, 29)]
+    [InlineData(30, 30, 30, 3, 49)]
+    [InlineData(30, 30, 30, 9, 49)]
+    [InlineData(30, 30, 30, 10, 79)]
+    [InlineData(30, 30, 30, 20, 79)]
+    public void CalculatesCorrectPriceForSmallPackages(int length, int width, int height, int weight, int expected)
     {
         // Arrange
         var sut = new Block();
