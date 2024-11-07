@@ -10,7 +10,26 @@ public class Block
 
     public float GetPrice()
     {
-        throw new NotImplementedException();
+        // If packet is outside of size limits
+        if (Length > 30 || Height > 30 || Width > 30 || Weight > 20)
+        {
+            var min = Math.Min(Math.Min(Length, Height), Width);
+            var max = Math.Max(Math.Max(Length, Height), Width);
+
+            // price is in öre
+            var price = min * max * Weight + 10000;
+
+            // return in sek
+            return price / 100;
+        }
+
+        return Weight switch
+        {
+            <= 2 => 29,
+            <= 9 => 49,
+            _ => 79
+        };
+
     }
 
     public float GetVolume()
@@ -19,6 +38,7 @@ public class Block
         {
             throw new ArgumentOutOfRangeException("Length and height and width must be non-negative.");
         }
+
         return Height * Width * Length;
     }
 }

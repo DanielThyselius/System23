@@ -48,7 +48,7 @@ public class BlockTests
         Assert.ThrowsAny<ArgumentOutOfRangeException>(() => sut.GetVolume());
     }
     
-    // Om längsta sidan <= 30 cm gäller detta:
+    // Om längsta sidan <= 30 cm, och vikt max 20kg gäller detta:
     // 0-2 kg, 29 kr,
     // 3-9 kg, 49 kr,
     // 10-20 kg, 79 kr
@@ -58,6 +58,7 @@ public class BlockTests
 
 
     [Theory]
+    // Small packets (<= 30)
     [InlineData(30, 30, 30, 0, 29)]
     [InlineData(30, 30, 30, 1, 29)]
     [InlineData(1, 1, 1, 1, 29)]
@@ -67,7 +68,14 @@ public class BlockTests
     [InlineData(30, 30, 30, 9, 49)]
     [InlineData(30, 30, 30, 10, 79)]
     [InlineData(30, 30, 30, 20, 79)]
-    public void CalculatesCorrectPriceForSmallPackages(int length, int width, int height, int weight, int expected)
+    [InlineData(30, 30, 30, 50, 550)]
+    // Large packets
+    [InlineData(31, 10, 10, 10, 131)]
+    [InlineData(10, 31, 10, 10, 131)]
+    [InlineData(10, 10, 31, 10, 131)]
+    [InlineData(10, 10, 50, 1, 105)]
+    [InlineData(10, 10, 50, 0, 100)]
+    public void CalculatesCorrectPrice(int length, int width, int height, int weight, int expected)
     {
         // Arrange
         var sut = new Block();
