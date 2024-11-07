@@ -9,12 +9,11 @@ public class UnitTest1
     {
         // Arrange
         var item = "Sko";
-        var price = 10f;
         var quantity = 3;
-        var discount = 10;
         var total = 27;
-        var date = DateTime.Parse("2024-01-01T12:00:00");
-        var sut = new ReceiptGenerator(price, quantity, discount);
+        var db = new TestDatabase();
+        var datetimeProvider = new TestDateTimeProvider();
+        var sut = new ReceiptGenerator(item, quantity, db, datetimeProvider);
 
         var expected = """
                         ********************************
@@ -23,11 +22,11 @@ public class UnitTest1
                         rabatt: 10%
                         Total price: 27:-
                         ~~~~~~~~~~~~~~~~~~~~~ 
-                        2024-01-01 12:00:00
+                        2024-01-05 12:00:00
                         ********************************
                         """;
         // Act
-        var actual = sut.Generate(item, total, date);
+        var actual = sut.Generate(item, total);
 
         // Assert
         Assert.Equal(expected, actual);
@@ -38,10 +37,11 @@ public class UnitTest1
     public void GetTotal()
     {
         // Arrange
-        var price = 10f;
+        var item = "Sko";
         var quantity = 3;
-        var discount = 10;
-        var sut = new ReceiptGenerator(price, quantity, discount);
+        var db = new TestDatabase();
+        var datetimeProvider = new TestDateTimeProvider();
+        var sut = new ReceiptGenerator(item, quantity, db, datetimeProvider);
 
         var expected = 27;
         // Act
@@ -50,5 +50,14 @@ public class UnitTest1
         // Assert
         Assert.Equal(expected, actual);
     }
-    
+}
+
+class TestDatabase : IDatabase
+{
+    public float GetItemPrice(string id) => 10;
+}
+
+class TestDateTimeProvider : IDateTimeProvider
+{
+    public DateTime Now => DateTime.Parse("2024-01-05T12:00:00");
 }
