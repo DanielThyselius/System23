@@ -15,11 +15,12 @@ public class Block
         {
             var min = Math.Min(Math.Min(Length, Height), Width);
             var max = Math.Max(Math.Max(Length, Height), Width);
-
+            
             // price is in öre
             var price = min * max * Weight + 10000;
 
             // return in sek
+            // ReSharper disable once PossibleLossOfFraction
             return price / 100;
         }
 

@@ -34,7 +34,7 @@ public class BlockTests
     [InlineData(1, -1, -1)]
     [InlineData(-1, -1, 1)]
     [InlineData(-1, 1, -1)]
-    public void ThrowsExceptionOnNegativeDimensions(int length, int width, int height)
+    public void GetVolumeThrowsExceptionOnNegativeDimensions(int length, int width, int height)
     {
         // Arrange
         var sut = new Block();
