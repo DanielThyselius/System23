@@ -25,5 +25,6 @@ public class HelthCheckTests : IClassFixture<WebApplicationFactory<ApiMarker>>
         // These two lines do essentially the same thing
         response.EnsureSuccessStatusCode();
         // Assert.True(response.IsSuccessStatusCode);
+        Assert.Equal("Healthy", await response.Content.ReadAsStringAsync());
     }
 }

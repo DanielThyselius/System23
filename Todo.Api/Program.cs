@@ -1,4 +1,6 @@
 
+using Todo.Core.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,5 +24,36 @@ app.UseHttpsRedirection();
 // app.MapGet("/health", () => "Healthy");
 
 app.MapHealthChecks("/health");
+
+app.MapGet("api/todos", () =>
+{
+    var todos = new List<TodoItem>()
+    {
+        new TodoItem
+        {
+            Title = "Tvätta bilen",
+            Description = "Bilen måste tvättas, vi har en rabattkod på TvättaDinBil i stan.",
+            IsComplete = false,
+            Assignee = "Daniel"
+        },
+        new TodoItem
+        {
+            Title = "Köpa mjölk",
+            Description = "Test",
+            IsComplete = false,
+            Assignee = "Daniel"
+        },
+        new TodoItem
+        {
+            Title = "Köpa mjölk",
+            Description = "Test",
+            IsComplete = false,
+            Assignee = "Daniel"
+        }
+    };
+    // TODO: This should be fetched from a database (SQL)
+    
+    return todos;
+});
 
 app.Run();
