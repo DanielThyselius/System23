@@ -1,4 +1,5 @@
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Todo.Core.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
+
+// Create path for database
+var folder = Environment.SpecialFolder.LocalApplicationData;
+var path = Environment.GetFolderPath(folder);
+var dbPath = System.IO.Path.Join(path, "todo.db");
+
+builder.Services.AddDbContext<TodoDbContext>(options => { options.UseSqlite($"Data Source={dbPath}"); });
 
 var app = builder.Build();
 
@@ -25,34 +33,10 @@ app.UseHttpsRedirection();
 
 app.MapHealthChecks("/health");
 
-app.MapGet("api/todos", () =>
+// TODO: This should probably not be in Program.cs
+app.MapGet("api/todos", (TodoDbContext context) =>
 {
-    var todos = new List<TodoItem>()
-    {
-        new TodoItem
-        {
-            Title = "Tvätta bilen",
-            Description = "Bilen måste tvättas, vi har en rabattkod på TvättaDinBil i stan.",
-            IsComplete = false,
-            Assignee = "Daniel"
-        },
-        new TodoItem
-        {
-            Title = "Köpa mjölk",
-            Description = "Test",
-            IsComplete = false,
-            Assignee = "Daniel"
-        },
-        new TodoItem
-        {
-            Title = "Köpa mjölk",
-            Description = "Test",
-            IsComplete = false,
-            Assignee = "Daniel"
-        }
-    };
-    // TODO: This should be fetched from a database (SQL)
-    
+    var todos = context.Todos.ToListAsync();
     return todos;
 });
 
