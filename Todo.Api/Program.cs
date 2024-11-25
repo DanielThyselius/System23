@@ -1,5 +1,6 @@
 
 using Todo.Core.Models;
+using Todo.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
+
+builder.Services.AddTodoDbContext();
 
 var app = builder.Build();
 
@@ -52,6 +55,7 @@ app.MapGet("api/todos", () =>
         }
     };
     // TODO: This should be fetched from a database (SQL)
+    //_todoService.GetAllTodos();
     
     return todos;
 });
